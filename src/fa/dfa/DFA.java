@@ -95,4 +95,62 @@ public class DFA implements FAInterface, DFAInterface {
     public DFAState getToState(DFAState from, char onSymb) {
         return findState(from.getName()).getTransition(onSymb);
     }
+
+    public String toString()
+    {
+        Iterator<DFAState> Q = states.iterator();
+        Iterator <Character> sig = alphabet.iterator();
+
+        Iterator<DFAState> F = finalStates.iterator();
+
+        String output = "Q = { ";
+        //Instantiating string, and then looping threw different cases to add
+        while(Q.hasNext())
+        {
+            output += Q.next() + " ";
+        }
+
+        //Sigma value addition
+        output += "}\n Sigma = { ";
+        while(sig.hasNext())
+        {
+            output += sig.next() + " ";
+        }
+
+        //Delta addition
+        output += "}\n delta = \n\t";
+        sig = alphabet.iterator();
+
+        while(sig.hasNext())
+        {
+            output += "\t" + sig.next() + "\t";
+        }
+        output += "\n";
+        Q = states.iterator();
+        while(Q.hasNext())
+        {
+            sig = alphabet.iterator();
+            DFAState currentState = Q.next();
+            output += "\t" + currentState + "\t";
+            while(sig.hasNext())
+            {
+                output += currentState.getTransition(sig.next()) + "\t";
+            }
+
+            output += "\n";
+
+
+        }
+        output += "q0 = " + startState + "\n";
+        output += "F = { ";
+
+        while(F.hasNext())
+        {
+            output += F.next() + " ";
+        }
+
+        output += "}\n";
+
+        return output;
+    }
 }
