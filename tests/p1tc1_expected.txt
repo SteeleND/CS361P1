@@ -1,9 +1,9 @@
 Q = { b a }
 Sigma = { 0 1 }
 delta =
-  0 1
-b a b
-a a b
+	0	1	
+b	a	b	
+a	a	b	
 q0 = a
 F = { b }
 no

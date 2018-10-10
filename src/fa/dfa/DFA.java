@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public class DFA implements FAInterface, DFAInterface {
 
     private DFAState startState;
-    private Map<String, DFAState> states = new HashMap<>();
-    private Set<State> finalStates = new HashSet<>();
+    private Map<String, DFAState> states = new LinkedHashMap<>();
+    private Set<DFAState> finalStates = new LinkedHashSet<>();
 
     /**
      * Return the {@link DFAState} associated with the provided name.
@@ -98,7 +98,8 @@ public class DFA implements FAInterface, DFAInterface {
 
     public String toString()
     {
-        Iterator<DFAState> Q = states.iterator();
+        Set<Character> alphabet = getABC();
+        Iterator<DFAState> Q = states.values().iterator();
         Iterator <Character> sig = alphabet.iterator();
 
         Iterator<DFAState> F = finalStates.iterator();
@@ -111,27 +112,27 @@ public class DFA implements FAInterface, DFAInterface {
         }
 
         //Sigma value addition
-        output += "}\n Sigma = { ";
+        output += "}\nSigma = { ";
         while(sig.hasNext())
         {
             output += sig.next() + " ";
         }
 
         //Delta addition
-        output += "}\n delta = \n\t";
+        output += "}\ndelta =\n\t";
         sig = alphabet.iterator();
 
         while(sig.hasNext())
         {
-            output += "\t" + sig.next() + "\t";
+            output += "" + sig.next() + "\t";
         }
         output += "\n";
-        Q = states.iterator();
+        Q = states.values().iterator();
         while(Q.hasNext())
         {
             sig = alphabet.iterator();
             DFAState currentState = Q.next();
-            output += "\t" + currentState + "\t";
+            output += currentState + "\t";
             while(sig.hasNext())
             {
                 output += currentState.getTransition(sig.next()) + "\t";
@@ -149,7 +150,7 @@ public class DFA implements FAInterface, DFAInterface {
             output += F.next() + " ";
         }
 
-        output += "}\n";
+        output += "}";
 
         return output;
     }
