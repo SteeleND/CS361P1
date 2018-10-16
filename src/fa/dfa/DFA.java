@@ -81,6 +81,8 @@ public class DFA implements FAInterface, DFAInterface {
         DFAState state = startState;
 
         for (char transition : s.toCharArray()) {
+            if (transition == 'e') continue;
+            
             // if state is null, we either:
             // a.) got a character that is not part of the alphabet
             // b.) or the machine is missing transitions

@@ -55,4 +55,9 @@ class DFATest {
     void p1tc3() throws Exception {
         testDriver("p1tc3");
     }
+
+    @Test
+    void emptyTransition() throws Exception {
+        testDriver("empty");
+    }
 }
