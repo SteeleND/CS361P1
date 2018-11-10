@@ -1,0 +1,15 @@
+Q = { [a] [a, b] }
+Sigma = { 0 1 }
+delta =
+        0       1
+[a]     [a]     [a, b]
+[a, b]  [a]      [a, b]
+q0 = [a]
+F = { [a, b] }
+
+no
+4
+yes
+no
+yes
+no
