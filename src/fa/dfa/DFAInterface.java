@@ -37,5 +37,6 @@ public interface DFAInterface {
 	 * @param onSymb the label of the transition
 	 * @return the sink state.
 	 */
-	public abstract DFAState getToState(DFAState from, char onSymb);
+	public abstract State getToState(DFAState from, char onSymb);
+
 }

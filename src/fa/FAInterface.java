@@ -2,8 +2,6 @@ package fa;
 
 import java.util.Set;
 
-import fa.State;
-
 
 public interface FAInterface {
 
@@ -54,7 +52,7 @@ public interface FAInterface {
 	public abstract State getStartState();
 	
 	/**
-	 * Getter for Sigma
+	 * Getter for the alphabet Sigma
 	 * @return the alphabet of FA
 	 */
 	public abstract Set<Character> getABC();
