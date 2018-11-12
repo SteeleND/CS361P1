@@ -1,16 +1,17 @@
 Q = { G D A B C E F }
 Sigma = { 1 2 }
 delta =
-	1	2	
-G	F	G	
-D	D	E	
-A	B	C	
-B	D	E	
-C	F	G	
-E	D	E	
-F	F	G	
+   1 2
+ G F G
+ D D E
+ A B C
+ B D E
+ C F G
+ E D E
+ F F G
 q0 = A
 F = { G D }
+
 yes
 yes
 no

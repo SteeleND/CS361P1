@@ -98,62 +98,59 @@ public class DFA implements FAInterface, DFAInterface {
         return findState(from.getName()).getTransition(onSymb);
     }
 
-    public String toString()
-    {
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Q = { ");
         Set<Character> alphabet = getABC();
-        Iterator<DFAState> Q = states.values().iterator();
-        Iterator <Character> sig = alphabet.iterator();
 
-        Iterator<DFAState> F = finalStates.iterator();
-
-        String output = "Q = { ";
-        //Instantiating string, and then looping threw different cases to add
-        while(Q.hasNext())
-        {
-            output += Q.next() + " ";
+        for (DFAState state : states.values()) {
+            sb.append(state).append(" ");
         }
 
-        //Sigma value addition
-        output += "}\nSigma = { ";
-        while(sig.hasNext())
-        {
-            output += sig.next() + " ";
+        // sigma
+        sb.append("}\nSigma = { ");
+        for (Character c : alphabet) {
+            sb.append(c).append(" ");
         }
 
         //Delta addition
-        output += "}\ndelta =\n\t";
-        sig = alphabet.iterator();
+        sb.append("}\ndelta =\n");
 
-        while(sig.hasNext())
-        {
-            output += "" + sig.next() + "\t";
+        int width = states.values().stream()
+                .map(DFAState::toString)
+                .mapToInt(String::length)
+                .max()
+                .orElse(1) + 1;
+
+        sb.append(padLeft("", width));
+        for (Character c : alphabet) {
+            sb.append(padLeft(c, width));
         }
-        output += "\n";
-        Q = states.values().iterator();
-        while(Q.hasNext())
-        {
-            sig = alphabet.iterator();
-            DFAState currentState = Q.next();
-            output += currentState + "\t";
-            while(sig.hasNext())
-            {
-                output += currentState.getTransition(sig.next()) + "\t";
+        sb.append("\n");
+
+        for (DFAState state : states.values()) {
+            sb.append(padLeft(state, width));
+
+            for (Character c : alphabet) {
+                sb.append(padLeft(state.getTransition(c), width));
             }
 
-            output += "\n";
-
-
-        }
-        output += "q0 = " + startState + "\n";
-        output += "F = { ";
-
-        while(F.hasNext())
-        {
-            output += F.next() + " ";
+            sb.append("\n");
         }
 
-        output += "}";
+        sb.append("q0 = ").append(startState).append("\n");
+        sb.append("F = { ");
 
-        return output;
+        for (DFAState state : finalStates) {
+            sb.append(state).append(" ");
+        }
+
+        sb.append("}\n");
+
+        return sb.toString();
+    }
+
+    private static String padLeft(Object o, int n) {
+        return String.format("%1$" + n + "s", o);
     }
 }

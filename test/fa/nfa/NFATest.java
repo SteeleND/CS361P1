@@ -1,5 +1,7 @@
 package fa.nfa;
 
+import com.google.common.collect.Sets;
+import fa.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +10,10 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static fa.nfa.NFA.EMPTY_STRING;
 
 class NFATest {
 
@@ -62,8 +68,44 @@ class NFATest {
     }
 
     @Test
-    void emptyTransition() throws Exception {
-        testDriver("empty");
+    void closure() {
+        NFAState q0 = new NFAState("q0");
+        NFAState q1 = new NFAState("q1");
+        NFAState q2 = new NFAState("q2");
+        NFAState q3 = new NFAState("q3");
+
+        q0.addTransition(q1, EMPTY_STRING);
+        q1.addTransition(q2, 'a');
+        q2.addTransition(q3, EMPTY_STRING);
+        q3.addTransition(q3, EMPTY_STRING);
+
+        Set<String> expected = Sets.newHashSet("q0", "q1");
+        Set<String> actual = NFA.closure(q0)
+                .stream()
+                .map(State::getName)
+                .collect(Collectors.toSet());
+
+        Assertions.assertEquals(expected, actual);
     }
 
+    @Test
+    void reachable() {
+        NFAState q0 = new NFAState("q0");
+        NFAState q1 = new NFAState("q1");
+        NFAState q2 = new NFAState("q2");
+        NFAState q3 = new NFAState("q3");
+
+        q0.addTransition(q1, EMPTY_STRING);
+        q1.addTransition(q2, 'a');
+        q2.addTransition(q3, EMPTY_STRING);
+        q3.addTransition(q1, EMPTY_STRING); // loop back to c
+
+        Set<String> expected = Sets.newHashSet("q2", "q3", "q1");
+        Set<String> actual = NFA.reachable('a', q0)
+                .stream()
+                .map(State::getName)
+                .collect(Collectors.toSet());
+
+        Assertions.assertEquals(expected, actual);
+    }
 }
