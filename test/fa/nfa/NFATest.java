@@ -77,6 +77,18 @@ class NFATest {
         testDriver("p2tc5");
     }
 
+    // Example 5 - NFA to DFA
+    @Test
+    void p2tc6() throws Exception {
+        testDriver("p2tc6");
+    }
+
+    // Example 4 - NFA to DFA
+    @Test
+    void p2tc7() throws Exception {
+        testDriver("p2tc7");
+    }
+
     @Test
     void closure() {
         NFAState q0 = new NFAState("q0");

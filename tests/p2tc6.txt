@@ -1,0 +1,9 @@
+14
+0
+2
+0a0 0a1 0a2 2e1 1b1 2c2
+a
+abb
+acc
+e
+abbbc
