@@ -4,6 +4,6 @@ a
 aeb a0a a1a beb b0b b1b
 0
 000
-e011
+011
 e
-10111e
+10111

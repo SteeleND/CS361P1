@@ -68,6 +68,16 @@ class NFATest {
     }
 
     @Test
+    void p2tc4() throws Exception {
+        testDriver("p2tc4");
+    }
+
+    @Test
+    void p2tc5() throws Exception {
+        testDriver("p2tc5");
+    }
+
+    @Test
     void closure() {
         NFAState q0 = new NFAState("q0");
         NFAState q1 = new NFAState("q1");
