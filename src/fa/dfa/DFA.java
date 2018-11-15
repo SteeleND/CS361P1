@@ -1,156 +1,171 @@
 package fa.dfa;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import fa.FAInterface;
 import fa.State;
 
-import java.util.*;
-import java.util.stream.Collectors;
+/**
+ * Implementation of DFA class to be used
+ * in p1p2
+ * @author elenasherman
+ *
+ */
+public class DFA implements FAInterface, DFAInterface{
+	private Set<DFAState> states;
+	private DFAState start;
+	private Set<Character> ordAbc;
+	
+	public DFA(){
+		states = new LinkedHashSet<DFAState>();
+		ordAbc = new LinkedHashSet<Character>();
+	}
+	
+	/* (non-Javadoc)
+	 * @see p1.DFAInterface#addStartState(java.lang.String)
+	 */
+	@Override
+	public void addStartState(String name){
+		DFAState s = getState(name);
+		if(s == null){
+			s = new DFAState(name);
+			addState(s);
+		}
+		start = s;
+	}
+	/* (non-Javadoc)
+	 * @see p1.DFAInterface#addState(java.lang.String)
+	 */
+	@Override
+	public void addState(String name){
+		DFAState s = new DFAState(name);
+		addState(s);
+	}
+	
+	/* (non-Javadoc)
+	 * @see p1.DFAInterface#addFinalState(java.lang.String)
+	 */
+	@Override
+	public void addFinalState(String name){
+		DFAState s = new DFAState(name, true);
+		addState(s);
+	}
+	
+	private void addState(DFAState s){
+		states.add(s);
+	}
+	
+	/* (non-Javadoc)
+	 * @see p1.DFAInterface#addTransition(p1.State, char, p1.State)
+	 */
+	@Override
+	public void addTransition(String fromState, char onSymb, String toState){
+		
+		(getState(fromState)).addTransition(onSymb, getState(toState));
+		if(!ordAbc.contains(onSymb)){
+			ordAbc.add(onSymb);
+		}
+	}
 
-public class DFA implements FAInterface, DFAInterface {
+	private DFAState getState(String name){
+		DFAState ret = null;
+		for(DFAState s : states){
+			if(s.getName().equals(name)){
+				ret = s;
+				break;
+			}
+		}
+		return ret;
+	}
+	
+	/** (non-Javadoc)
+	 * @see p1.DFAInterface#toString()
+	 **/
+	@Override
+	public String toString(){
+		
+		String s = "Q = { ";
+		String fStates = "F = { ";
+		for(DFAState state : states){
+			s += state.toString();
+			s +=" ";
+			if(state.isFinal()){
+				fStates +=state.toString();
+				fStates += " ";
+			}
+		}
+		s += "}\n";
+		fStates += "}\n";
+		s += "Sigma = { ";
+		for(char c : ordAbc){
+			s += c + " ";
+		}
+		s += "}\n";
+		//create transition table
+		s += "delta =\n"+String.format("%10s", "");;
+		for(char c : ordAbc){
+			s += String.format("%10s", c);
+		}
+		s+="\n";
+		for(DFAState state : states){
+			s += String.format("%10s",state.toString());
+			for(char c : ordAbc){
+				s += String.format("%10s", state.getTo(c).toString());
+			}
+			s+="\n";
+		}
+		//start state
+		s += "q0 = " + start + "\n";
+		s += fStates;
+		return s;
+	}
 
-    private DFAState startState;
-    private Map<String, DFAState> states = new LinkedHashMap<>();
-    private Set<DFAState> finalStates = new LinkedHashSet<>();
+	@Override
+	public boolean accepts(String input) {
+		boolean ret = false;
+		char[] inputString = input.toCharArray();
+		DFAState currState = start;
+		//iterate over the chars
+		if(!(inputString.length==1 && inputString[0] == 'e')){
+			for(char c : inputString){
+				currState = currState.getTo(c);
+			}
+		}
+		if(currState.isFinal()){
+			ret = true;
+		} 
+		return ret;
+	}
 
-    /**
-     * Return the {@link DFAState} associated with the provided name.
-     *
-     * @throws IllegalArgumentException if the state is not defined
-     */
-    private DFAState findState(String name) {
-        if (!states.containsKey(name)) {
-            throw new IllegalArgumentException("Invalid state: " + name);
-        }
+	@Override
+	public Set<DFAState> getStates() {
+		return states;
+	}
 
-        return states.get(name);
-    }
+	@Override
+	public Set<DFAState> getFinalStates() {
+		Set<DFAState> ret = new LinkedHashSet<DFAState>();
+		for(DFAState s : states){
+			if(s.isFinal()){
+				ret.add(s);
+			}
+		}
+		return ret;
+	}
 
-    @Override
-    public void addStartState(String name) {
-        if (startState != null) {
-            throw new IllegalStateException("Cannot define more than one start state");
-        }
+	@Override
+	public DFAState getStartState() {
+		return start;
+	}
 
-        startState = states.computeIfAbsent(name, DFAState::new);
-    }
+	@Override
+	public DFAState getToState(DFAState from, char onSymb) {
+		return from.getTo(onSymb);
+	}
 
-    @Override
-    public void addState(String name) {
-        states.computeIfAbsent(name, DFAState::new);
-    }
-
-    @Override
-    public void addFinalState(String name) {
-        DFAState state = states.computeIfAbsent(name, DFAState::new);
-        finalStates.add(state);
-    }
-
-    @Override
-    public void addTransition(String fromState, char onSymb, String toState) {
-        DFAState from = findState(fromState);
-        DFAState to = findState(toState);
-
-        from.addATransition(to, onSymb);
-    }
-
-    @Override
-    public Set<? extends State> getStates() {
-        return new HashSet<>(states.values());
-    }
-
-    @Override
-    public Set<? extends State> getFinalStates() {
-        return finalStates;
-    }
-
-    @Override
-    public State getStartState() {
-        return startState;
-    }
-
-    @Override
-    public Set<Character> getABC() {
-        return states.values().stream()
-                .map(DFAState::getTransitions)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public boolean accepts(String s) {
-        DFAState state = startState;
-
-        for (char transition : s.toCharArray()) {
-            if (transition == 'e') continue;
-            
-            // if state is null, we either:
-            // a.) got a character that is not part of the alphabet
-            // b.) or the machine is missing transitions
-            if (state == null) return false;
-            state = state.getTransition(transition);
-        }
-
-        return finalStates.contains(state);
-    }
-
-    @Override
-    public DFAState getToState(DFAState from, char onSymb) {
-        return findState(from.getName()).getTransition(onSymb);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Q = { ");
-        Set<Character> alphabet = getABC();
-
-        for (DFAState state : states.values()) {
-            sb.append(state).append(" ");
-        }
-
-        // sigma
-        sb.append("}\nSigma = { ");
-        for (Character c : alphabet) {
-            sb.append(c).append(" ");
-        }
-
-        //Delta addition
-        sb.append("}\ndelta =\n");
-
-        int width = states.values().stream()
-                .map(DFAState::toString)
-                .mapToInt(String::length)
-                .max()
-                .orElse(1) + 1;
-
-        sb.append(padLeft("", width));
-        for (Character c : alphabet) {
-            sb.append(padLeft(c, width));
-        }
-        sb.append("\n");
-
-        for (DFAState state : states.values()) {
-            sb.append(padLeft(state, width));
-
-            for (Character c : alphabet) {
-                sb.append(padLeft(state.getTransition(c), width));
-            }
-
-            sb.append("\n");
-        }
-
-        sb.append("q0 = ").append(startState).append("\n");
-        sb.append("F = { ");
-
-        for (DFAState state : finalStates) {
-            sb.append(state).append(" ");
-        }
-
-        sb.append("}\n");
-
-        return sb.toString();
-    }
-
-    private static String padLeft(Object o, int n) {
-        return String.format("%1$" + n + "s", o);
-    }
+	@Override
+	public Set<Character> getABC() {
+		return ordAbc;
+	}
 }

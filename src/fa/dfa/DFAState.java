@@ -1,68 +1,74 @@
 package fa.dfa;
 
+import java.util.HashMap;
+
 import fa.State;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-
 /**
- * Starting instantiating a few simple things, state storage (Hashmap) State constructor, and transitions
+ * Jan 19, 2017
+ * Implementation of a DFA state, which
+ * mainly contains the information of its
+ * neighboring states.
+ * @author elenasherman
+ *
  */
-public class DFAState extends State {
+public class DFAState extends State{
+	
 
-    /**
-     * Instantiating the Hashmap that will represent the states
-     */
-    private HashMap<Character, DFAState> transition;
+	private HashMap<Character,DFAState> delta;//delta
+	private boolean isFinal;//remembers its type
+	
+	/**
+	 * Default constructor
+	 * @param name the state name
+	 */
+	public DFAState(String name){
+		initDefault(name);
+		isFinal = false;
+	}
+	
+	/**
+	 * Overlaoded constructor that sets the state type
+	 * @param name the state name
+	 * @param isFinal the type of state: true - final, false - nonfinal.
+	 */
+	public DFAState(String name, boolean isFinal){
+		initDefault(name);
+		this.isFinal = isFinal;
+	}
+	
+	private void initDefault(String name ){
+		this.name = name;
+		delta = new HashMap<Character, DFAState>();
+	}
+	
+	/**
+	 * Accessor for the state type
+	 * @return true if final and false otherwise
+	 */
+	public boolean isFinal(){
+		return isFinal;
+	}
+	
 
-    /**
-     * State constructor
-     *
-     * @param name Name for the state
-     */
-    public DFAState(String name) {
-        transition = new HashMap<>();
-        this.name = name;
-    }
-
-    /**
-     * Adds a transition to the given state
-     *
-     * @param toState state name for transition
-     * @param c       consumed input
-     */
-    public void addATransition(DFAState toState, char c) {
-        transition.put(c, toState);
-    }
-
-    /**
-     * Checks if a givne transition is
-     *
-     * @param c char to be consumed if possible
-     * @return the state that you can go to, or null
-     */
-    public DFAState getTransition(char c) {
-        return transition.get(c);
-    }
-
-    /**
-     * @return the set of all transition characters
-     */
-    public Set<Character> getTransitions() {
-        return transition.keySet();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DFAState dfaState = (DFAState) o;
-        return Objects.equals(name, dfaState.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
+	/**
+	 * Add the transition from <code> this </code> object
+	 * @param onSymb the alphabet symbol
+	 * @param toState to DFA state
+	 */
+	public void addTransition(char onSymb, DFAState toState){
+		delta.put(onSymb, toState);
+	}
+	
+	/**
+	 * Retrieves the state that <code>this</code> transitions to
+	 * on the given symbol
+	 * @param symb - the alphabet symbol
+	 * @return the new state 
+	 */
+	public DFAState getTo(char symb){
+		return delta.get(symb);
+	}
+	
+	
 }
