@@ -1,9 +1,9 @@
 Q = { [q] [r, s] }
 Sigma = { 0 1 }
 delta =
-             0      1
-    [q] [r, s] [r, s]
- [r, s]    [q]    [q]
+                   0         1
+       [q]    [r, s]    [r, s]
+    [r, s]       [q]       [q]
 q0 = [q]
 F = { [r, s] }
 

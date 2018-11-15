@@ -92,7 +92,11 @@ public class NFA implements FAInterface, NFAInterface {
 
         // compute new start state
         Set<NFAState> start = eClosure(startState);
-        dfa.addStartState(name(start));
+        String startName = name(start);
+        if (isFinal(start)) {
+            dfa.addFinalState(startName);
+        }
+        dfa.addStartState(startName);
 
         // track nodes that we need to visit
         Queue<Set<NFAState>> queue = new ArrayDeque<>();
@@ -111,14 +115,15 @@ public class NFA implements FAInterface, NFAInterface {
                 String toName = name(to);
 
                 if (!visited.contains(toName)) {
-                    dfa.addState(toName);
-
                     // mark as final if any of the individual NFA states are final
-                    if (to.stream().anyMatch(finalStates::contains)) {
+                    if (isFinal(to)) {
                         dfa.addFinalState(toName);
+                    } else {
+                        dfa.addState(toName);
                     }
 
                     queue.add(to);
+                    visited.add(toName);
                 }
 
                 dfa.addTransition(fromName, transition, toName);
@@ -126,6 +131,13 @@ public class NFA implements FAInterface, NFAInterface {
         }
 
         return dfa;
+    }
+
+    /**
+     * @return true if the new DFA state should be marked as final
+     */
+    private boolean isFinal(Set<NFAState> state) {
+        return state.stream().anyMatch(finalStates::contains);
     }
 
     /**
