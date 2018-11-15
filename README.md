@@ -1,41 +1,52 @@
-#Project 1: DFA
+# Project 1 Part 2 - NFA
 
-*Authors: Nathan Steele and Nathan Regner
-*Class: CS361
-*Semester: Fall 2018
+* Authors: Nathan Steele and Nathan Regner
+* Class: CS361
+* Semester: Fall 2018
 
 ## Overview
 
-Our program uses the fa.dfa package to setup a DFA machine, using a given text file, supplied as a command line argument,
-parsing strings from the file to verify they are part of the language, and moving along the machine. 
+This program provides an complete implementation of the NFAInterface interface,
+capable of converting itself to an equivalent DFA.
 
 ## Compiling and Using
--Open a console
--Make your way to the directory containing the file.
--Use the following java command to compile the file:
-	javac fa/dfa/DFADriver.java
--Use the following java command to run the file, giving command line arguments for the textfile:
-	java fa.dfa.DFADriver ./tests/testing.txt
 
-This will then build the state machine, run through each string and then provide an output telling the users the outcome
-of the string, including accepted or not.
+To compile the project, run:
+
+`javac fa/nfa/NFADriver.java`
+
+You can then run the simulator with the following command:
+
+`java fa.nfa.NFADriver ./tests/p2tc0.txt`
+
+Output will be printed to stdout.
 
 ## Discussion
-Overall there was not a lot of challenges once we got a base of what needed to be done, and had the time to look over
-the handout a bit. We used the HashMap to manage states, as it needed to, and we implemented this in the DFAState class,
-fairly basic implementation of it, nothing really difficult on that part.  
-The DFA.java was where the majority of our code was done, managing the functionality that we were going to need, and ensuring
-that it would handle the strings that we were testing on, as well as planning for different situations was the most
-difficult part. After some general logic building, we were able to move our code in a direction which ended up working out for us.
 
-The majority of errors were ironed out during writing of the classes. We didnt have any real large errors that we ran into
-as most of the setup was straight forward after we figured out what direction we wanted to take things. There were a few
-simple errors, such as null pointers or small syntax fixs. I(Nathan Steele) dont work in Java regularly enough, and ended up causing
-myself a few headaches, just based off syntax problems.
+For the most part, this project was straightforward. We were quickly able
+to develop the NFA class by copy-pasting most of our DFA implementation.
+From here, we implemented a simple breadth-first search algorithm in the
+toDFA() method.
+
+After getting our initial implementation working, we realized that we were
+not using the provided DFA class. Once we swapped our class out, we found
+several bugs in our toDFA() implementation. These bugs were caused by the
+following differences:
+
+* The provided DFA requires that you add start states after final states. 
+  Otherwise, the DFA ends up containing duplicates.
+
+* The DFA class does not prevent you from adding duplicate states, unlike
+  our original implementation. We relied on this behavior in our first
+  implementation.
+
+Once we tracked down these differences in the provided DFA implementation, 
+we were able to update our algorithm to deal with them.
 
 ## Testing
 
+For the majority of our testing we relied on the provided test cases, however
+we did create several of our own.
 
-For the majority of our testing we relied on the test files provided. Running from our personal computers, then running the final
-tests from onyx to ensure cross platform errors didn't occur. We did original test cases from IDE, but as we were wrapping up
-we tested everything on Onyx, as stated before, to ensure it was working. 
+To make testing easier, we setup a maven project with JUnit. This allowed us to 
+run tests within our IDE and quickly get feedback.
