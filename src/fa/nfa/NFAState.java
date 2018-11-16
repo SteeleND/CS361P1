@@ -21,7 +21,7 @@ public class NFAState extends State {
     }
 
     public Set<NFAState> getTransition(char onSymb) {
-        return transitions.getOrDefault(onSymb, Collections.EMPTY_SET);
+        return transitions.getOrDefault(onSymb, new LinkedHashSet<>());
     }
 
     @Override
