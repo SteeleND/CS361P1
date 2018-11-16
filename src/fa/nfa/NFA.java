@@ -7,6 +7,11 @@ import fa.dfa.DFA;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a non-deterministic finite automata.
+ *
+ * @author Nathan Regner, Nathan Steele
+ */
 public class NFA implements FAInterface, NFAInterface {
 
     static final char EMPTY_STRING = 'e';
