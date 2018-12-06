@@ -23,7 +23,7 @@ Output will be printed to stdout.
 
 ## Discussion
 
-We did did not encounter too many issues during our implementation of the RE
+We did not encounter too many issues during our implementation of the RE
 class. Mostly, we just had to figure out how to write a recursive descent
 parser for the regex. Using the provided resources, we were able to develop 
 an initial algorithm that did most of what we wanted. From here, we just had 
