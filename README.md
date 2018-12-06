@@ -6,8 +6,8 @@
 
 ## Overview
 
-This program constructs an NFA form a regular expression. It then uses this NFA
-to construct a DFA, which is used to check if the regular expression matches strings.
+This program constructs an NFA from a regular expression. It then converts
+the NFA to a DFA and simulates it on a variety of string inputs.
 
 ## Compiling and Using
 
@@ -23,10 +23,10 @@ Output will be printed to stdout.
 
 ## Discussion
 
-We did did not encounter too many issues in our implementation of the RE
+We did did not encounter too many issues during our implementation of the RE
 class. Mostly, we just had to figure out how to write a recursive descent
-parser so we could parse the regex. Using the provided resources, we were 
-able to develop a solution that worked relatively well. From here, we had
+parser for the regex. Using the provided resources, we were able to develop 
+an initial algorithm that did most of what we wanted. From here, we just had 
 to figure out how the provided NFA implementation worked, as it was slightly 
 different than our version from P2.
 
