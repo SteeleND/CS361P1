@@ -4,4 +4,4 @@ aba
 bba
 a
 b
-bbbcat
+bbb

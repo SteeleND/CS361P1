@@ -59,6 +59,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>cs361</groupId>
+            <artifactId>cs361fa</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/CS361FA.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
