@@ -1,0 +1,8 @@
+((a|b)(a|b))*
+abbabb
+e
+3
+aa
+ab
+aaaaa
+bba

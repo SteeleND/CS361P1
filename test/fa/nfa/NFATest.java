@@ -11,28 +11,21 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import static fa.nfa.NFA.EMPTY_STRING;
 
 class NFATest {
 
-    /**
-     * Like {@link Runnable}, but handles checked exceptions
-     */
-    @FunctionalInterface
-    private interface Action {
-        void call() throws Exception;
-    }
-
-    private String captureOutput(Action a) throws Exception {
+    private String captureOutput(Callable c) throws Exception {
         PrintStream old = System.out;
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             PrintStream ps = new PrintStream(baos);
             System.setOut(ps);
 
-            a.call();
+            c.call();
             System.out.flush();
 
             return baos.toString();
@@ -42,7 +35,10 @@ class NFATest {
     }
 
     private void testDriver(String testCase) throws Exception {
-        String actual = captureOutput(() -> NFADriver.main(new String[]{"./tests/" + testCase + ".txt"}));
+        String actual = captureOutput(() -> {
+            NFADriver.main(new String[]{"./tests/" + testCase + ".txt"});
+            return null;
+        });
         String expected = new String(Files.readAllBytes(Paths.get("./tests/", testCase + "_expected.txt")), Charset.defaultCharset());
         Assertions.assertEquals(expected, actual);
     }
