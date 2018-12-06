@@ -1,4 +1,4 @@
-# Project 1 Part 2 - NFA
+# Project 1 Part 3 - Regular Expressions
 
 * Authors: Nathan Steele and Nathan Regner
 * Class: CS361
@@ -6,42 +6,30 @@
 
 ## Overview
 
-This program provides an complete implementation of the NFAInterface interface,
-capable of converting itself to an equivalent DFA.
+This program constructs an NFA form a regular expression. It then uses this NFA
+to construct a DFA, which is used to check if the regular expression matches strings.
 
 ## Compiling and Using
 
 To compile the project, run:
 
-`javac fa/nfa/NFADriver.java`
+`javac -cp ".:./CS361FA.jar" re/REDriver.java`
 
 You can then run the simulator with the following command:
 
-`java fa.nfa.NFADriver ./tests/p2tc0.txt`
+`java -cp ".:./CS361FA.jar" re.REDriver ./tests/p3tc1.txt`
 
 Output will be printed to stdout.
 
 ## Discussion
 
-For the most part, this project was straightforward. We were quickly able
-to develop the NFA class by copy-pasting most of our DFA implementation.
-From here, we implemented a simple breadth-first search algorithm in the
-toDFA() method.
+We did did not encounter too many issues in our implementation of the RE
+class. Mostly, we just had to figure out how to write a recursive descent
+parser so we could parse the regex. Using the provided resources, we were 
+able to develop a solution that worked relatively well. From here, we had
+to figure out how the provided NFA implementation worked, as it was slightly 
+different than our version from P2.
 
-After getting our initial implementation working, we realized that we were
-not using the provided DFA class. Once we swapped our class out, we found
-several bugs in our toDFA() implementation. These bugs were caused by the
-following differences:
-
-* The provided DFA requires that you add start states after final states. 
-  Otherwise, the DFA ends up containing duplicates.
-
-* The DFA class does not prevent you from adding duplicate states, unlike
-  our original implementation. We relied on this behavior in our first
-  implementation.
-
-Once we tracked down these differences in the provided DFA implementation, 
-we were able to update our algorithm to deal with them.
 
 ## Testing
 
